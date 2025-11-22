@@ -54,19 +54,31 @@ class PasienAppointmentController extends Controller
         $request->validate([
             'dokter_id' => 'required|exists:users,id',
             'schedule_id' => 'required|exists:schedules,id',
-            'tanggal_booking' => 'required|date|after_or_equal:today',
+            'tanggal_booking' => 'required|date|after_or_equal:tomorrow', // After or equal tomorrow
             'keluhan' => 'required|string|max:500',
         ]);
 
-        // Cek apakah pasien sudah memiliki janji temu pending/approved
-        $exists = Appointment::where('pasien_id', Auth::id())
+        // Cek 1: Apakah pasien sudah memiliki janji temu pending/approved?
+        $patientActiveAppointment = Appointment::where('pasien_id', Auth::id())
             ->whereIn('status', ['Pending', 'Approved'])
             ->exists();
 
-        if ($exists) {
+        if ($patientActiveAppointment) {
             return back()->with('error', 'Anda sudah memiliki janji temu yang aktif. Mohon tunggu konfirmasi yang sudah ada.');
         }
 
+        // Cek 2: Apakah slot jadwal di tanggal tersebut sudah penuh/tabrakan?
+        $collision = Appointment::where('dokter_id', $request->dokter_id)
+            ->where('schedule_id', $request->schedule_id)
+            ->whereDate('tanggal_booking', $request->tanggal_booking)
+            ->whereIn('status', ['Pending', 'Approved']) // Cek jika ada yang masih diproses/disetujui
+            ->exists();
+        
+        if ($collision) {
+             return back()->with('error', 'Slot jadwal yang Anda pilih pada tanggal tersebut sudah terisi. Mohon pilih jam atau tanggal lain.');
+        }
+
+        // Jika semua cek lolos
         Appointment::create([
             'pasien_id' => Auth::id(),
             'dokter_id' => $request->dokter_id,

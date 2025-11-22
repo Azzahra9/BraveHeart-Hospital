@@ -132,8 +132,8 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->name('dokter.')->g
             'bulan', 
             'data_periksa', 
             'data_pending',
-            'totalRecords', // Data Real
-            'totalRevenue'  // Data Real
+            'totalRecords', 
+            'totalRevenue'  
         ));
     })->name('dashboard');
 
@@ -149,7 +149,7 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->name('dokter.')->g
 // --- 5. ROUTE GROUP: PASIEN ---
 Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->name('pasien.')->group(function () {
     
-    // Dashboard Pasien (BARU: Mengirim Data Pasien)
+    // Dashboard Pasien (MENGIRIM DATA PASIEN)
     Route::get('/dashboard', function () {
         $pasienId = Auth::id();
 
@@ -175,9 +175,13 @@ Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->name('pasien.')->g
         return view('pasien.dashboard', compact('latestAppointment', 'lastRecord', 'availableDoctors'));
     })->name('dashboard');
 
+    // Appointments (Booking)
     Route::resource('appointments', \App\Http\Controllers\PasienAppointmentController::class)->only(['index', 'create', 'store', 'show']);
-    
+    Route::patch('/appointments/{id}/cancel', [\App\Http\Controllers\PasienAppointmentController::class, 'cancel'])->name('appointments.cancel');
+
+    // Medical Records
     Route::get('/my-medical-records', [\App\Http\Controllers\PasienMedicalRecordController::class, 'index'])->name('medical-records.index');
+    Route::get('/my-medical-records/{id}', [\App\Http\Controllers\PasienMedicalRecordController::class, 'show'])->name('medical-records.show');
 });
 
 
