@@ -24,6 +24,7 @@ class User extends Authenticatable
         'role',
         'poli_id',
         'username',
+        'profile_photo_path',
     ];
 
     // Relasi [cite: 164-166]
@@ -41,6 +42,13 @@ class User extends Authenticatable
 
     public function patientAppointments() {
         return $this->hasMany(Appointment::class, 'pasien_id');
+    }
+    
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo_path
+                    ? Storage::url($this->profile_photo_path)
+                    : 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=7F9CF5&background=EBF4FF';
     }
     /**
      * The attributes that should be hidden for serialization.

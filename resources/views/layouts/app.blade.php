@@ -31,12 +31,11 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
-    <!-- FIX 1: Set sidebarOpen=true (default buka di PC) -->
+    <!-- FIX 1: Set sidebarOpen default true (agar langsung terbuka di PC/Laptop) -->
     <body class="font-sans antialiased bg-gray-50 text-gray-900" x-data="{ sidebarOpen: true }">
         <div class="min-h-screen flex">
             
             <!-- 1. SIDEBAR (Fixed & Maroon) -->
-            <!-- Sidebar selalu tampil di desktop (md:translate-x-0) -->
             <aside class="w-64 bg-gradient-to-b from-primary to-red-900 text-white shadow-2xl fixed h-full z-40 transition-transform duration-300 md:translate-x-0" 
                    :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }"
                    @click.outside="if(window.innerWidth < 768) sidebarOpen = false"> 
@@ -136,11 +135,9 @@
             </aside>
 
             <!-- MAIN CONTENT -->
-            <!-- FIX 2: Tambahkan md:ml-64 ke MAIN CONTENT agar konten bergeser secara default -->
             <div class="flex-1 md:ml-64 flex flex-col min-h-screen"> 
                 
                 <!-- Overlay Backdrop for Mobile Menu -->
-                <!-- FIX: Backdrop hanya muncul saat sidebar terbuka (dikelola oleh JS) -->
                 <div x-show="sidebarOpen" class="fixed inset-0 bg-black/50 z-30 md:hidden" @click="sidebarOpen = false"></div>
 
                 <!-- Topbar -->
@@ -149,8 +146,8 @@
                         
                         <!-- Hamburger Menu (Mobile) & Judul -->
                         <div class="flex items-center">
-                            <!-- FIX 3: Tambahkan z-30 agar tombol memiliki prioritas klik -->
-                            <button class="md:hidden text-gray-500 hover:text-primary mr-4 relative z-30" @click.stop="sidebarOpen = !sidebarOpen">
+                            <!-- Tombol Hamburger HANYA muncul jika TIDAK di desktop/layar besar -->
+                            <button class="md:hidden text-gray-500 hover:text-primary mr-4" @click.stop="sidebarOpen = !sidebarOpen">
                                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                             </button>
                             <h2 class="font-bold text-xl text-gray-800 leading-tight flex items-center">
@@ -167,8 +164,17 @@
                                     <p class="text-xs text-gray-500 capitalize">{{ Auth::user()->role }}</p>
                                 </div>
                             </div>
-                            <div class="h-11 w-11 rounded-full bg-gradient-to-br from-primary to-red-600 text-white flex items-center justify-center font-bold text-xl shadow-md ring-2 ring-red-100">
-                                {{ substr(Auth::user()->name, 0, 1) }}
+                            <!-- FIX: Gunakan img tag untuk menampilkan foto profil -->
+                            <div class="h-11 w-11 rounded-full bg-gradient-to-br from-primary to-red-600 text-white flex items-center justify-center font-bold text-xl shadow-md ring-2 ring-red-100 overflow-hidden">
+                                <img src="{{ Auth::user()->profile_photo_url }}" 
+                                     alt="Foto Profil" 
+                                     class="w-full h-full object-cover"
+                                     onerror="this.onerror=null;this.src='{{ asset('images/avatar-default.png') }}';">
+                                
+                                <!-- Jika foto gagal/tidak ada, tampilkan inisial (fallback) -->
+                                @if (Auth::user()->profile_photo_url === 'https://ui-avatars.com/api/...')
+                                    <span class="absolute">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
