@@ -1,131 +1,146 @@
-<x-app-layout>
-    <x-slot name="header">
-        {{ __('Dashboard Pasien') }}
-    </x-slot>
+<x-guest-master>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <!-- Kolom Kiri (Lebar): Booking & Doctors List -->
-        <div class="lg:col-span-2 space-y-8">
-            
-            <!-- Welcome Banner -->
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Selamat Datang, {{ Auth::user()->name }}!</h2>
-                <p class="text-gray-500">Kesehatan Anda prioritas kami. Cari dokter, buat janji, dan kelola riwayat kesehatan Anda di sini.</p>
+    <!-- HEADER BANNER -->
+    <div class="relative bg-gradient-to-br from-red-50 via-white to-white py-20 overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-red-100 rounded-full blur-3xl opacity-50"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-red-50 rounded-full blur-3xl opacity-50"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 text-primary text-sm font-bold mb-6">
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
+                Tim Medis Profesional
             </div>
-            
-            <!-- Jadwal Mendatang & Status -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Status Janji Temu Terbaru -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Status Janji Temu Terbaru</h3>
-                    @if($latestAppointment)
-                        <div class="space-y-2">
-                            <p class="text-lg font-extrabold text-primary">{{ $latestAppointment->dokter->name ?? '-' }}</p>
-                            <span class="text-sm font-medium text-gray-500 block">Poli {{ $latestAppointment->dokter->poli->nama_poli ?? 'Tidak Diketahui' }}</span>
-                            <span class="text-sm font-medium text-gray-500 block">Tanggal: {{ \Carbon\Carbon::parse($latestAppointment->tanggal_booking)->format('d M Y') }}</span>
-                        </div>
-                        <div class="mt-4">
-                            <span class="px-3 py-1 text-xs font-bold rounded-full 
-                                @if($latestAppointment->status == 'Pending') bg-yellow-100 text-yellow-700 @elseif($latestAppointment->status == 'Approved') bg-blue-100 text-blue-700 @else bg-gray-100 text-gray-700 @endif">
-                                {{ $latestAppointment->status }}
-                            </span>
-                        </div>
-                    @else
-                        <div class="py-6 text-center text-gray-400">
-                            <p class="text-sm">Anda belum memiliki janji temu.</p>
-                            <a href="{{ route('pasien.appointments.create') }}" class="text-primary font-bold hover:underline mt-2 inline-block">Buat Sekarang &rarr;</a>
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Riwayat Medis Singkat -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Kunjungan Terakhir</h3>
-                    @if($lastRecord)
-                        <div class="space-y-2">
-                            <p class="text-lg font-extrabold text-gray-700">{{ $lastRecord->diagnosis }}</p>
-                            <span class="text-sm font-medium text-gray-500 block">Dokter {{ $lastRecord->dokter->name }}</span>
-                            <span class="text-sm font-medium text-gray-500 block">Tanggal: {{ \Carbon\Carbon::parse($lastRecord->tanggal)->format('d M Y') }}</span>
-                        </div>
-                        <div class="mt-4">
-                            <a href="{{ route('pasien.medical-records.index') }}" class="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-red-800 transition shadow-sm">
-                                Lihat Detail Riwayat
-                            </a>
-                        </div>
-                    @else
-                        <div class="py-6 text-center text-gray-400">
-                            <p class="text-sm">Belum ada riwayat medis.</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            
-            <!-- Rekomendasi Dokter (Booking Section) -->
-            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100">
-                <h3 class="text-xl font-bold text-gray-900 mb-6">Rekomendasi Dokter Jantung</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @foreach($availableDoctors as $dokter)
-                    <div class="text-center p-3 border border-gray-100 rounded-xl hover:shadow-md transition group cursor-pointer" onclick="window.location='{{ route('pasien.appointments.create') }}'">
-                        <div class="h-16 w-16 rounded-full bg-red-50 text-primary flex items-center justify-center font-bold text-xl mx-auto mb-2 group-hover:scale-105 transition">
-                            {{ substr($dokter->name, 0, 1) }}
-                        </div>
-                        <p class="font-bold text-sm text-gray-800 truncate">{{ $dokter->name }}</p>
-                        <p class="text-xs text-gray-500">{{ $dokter->poli->nama_poli ?? 'Umum' }}</p>
-                        <a href="{{ route('pasien.appointments.create') }}" class="mt-2 inline-block text-xs font-bold text-primary hover:underline">
-                            Booking &rarr;
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Kolom Kanan: Detail Profil (Mirip Breeze) -->
-        <div class="lg:col-span-1 space-y-8">
-            <div class="bg-gradient-to-b from-primary to-red-900 rounded-[2rem] p-8 text-white relative overflow-hidden shadow-xl flex flex-col items-center text-center">
-                <div class="relative z-10">
-                    <p class="text-red-200 text-xs font-bold uppercase tracking-widest mb-6">Akun Saya</p>
-                    
-                    <div class="w-24 h-24 bg-white p-1 rounded-full mx-auto mb-4 shadow-2xl">
-                        <div class="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 text-white flex items-center justify-center font-bold text-4xl">
-                            {{ substr(Auth::user()->name, 0, 1) }}
-                        </div>
-                    </div>
-                    
-                    <h3 class="text-2xl font-bold">{{ Auth::user()->name }}</h3>
-                    <p class="text-white/80 text-sm mt-1">{{ Auth::user()->email }}</p>
-
-                    <!-- Info Medis Singkat (PENTING: Perbaiki bagian ini) -->
-                    <div class="mt-8 space-y-3 p-4 bg-white/10 rounded-xl border border-white/20">
-                        <div class="flex justify-between items-center text-sm border-b border-white/10 pb-2">
-                            <span>Golongan Darah</span>
-                            <span class="font-bold bg-white/20 px-2 py-0.5 rounded">O+</span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span>Kunjungan Terakhir</span>
-                            <!-- PERBAIKAN: Gunakan tanda tanya ganda (??) untuk menangani null secara aman -->
-                            <span class="font-bold">
-                                {{ $lastRecord->tanggal ?? 'Belum Ada' }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <a href="{{ route('profile.edit') }}" class="mt-8 inline-block w-full py-3 bg-white text-primary font-bold rounded-xl hover:bg-red-50 transition shadow-lg">
-                        Edit Profil Saya
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Quick Link Riwayat -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm text-center">
-                <a href="{{ route('pasien.medical-records.index') }}" class="text-primary font-bold hover:underline">
-                    Lihat Semua Riwayat Medis &rarr;
-                </a>
-            </div>
-
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Temui Dokter Kami</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Didukung oleh tim dokter spesialis jantung berpengalaman yang siap memberikan pelayanan terbaik dengan sepenuh hati.</p>
         </div>
     </div>
 
-</x-app-layout>
+    <!-- LIST DOKTER -->
+    <main class="py-12 bg-white min-h-screen">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            
+            <!-- Formulir Pencarian Lanjutan -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 -mt-24 relative z-10 mb-12">
+                <form action="{{ route('guest.dokter') }}" method="GET">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        
+                        <!-- 1. Pencarian Nama -->
+                        <div>
+                            <label for="search" class="block text-xs font-bold text-gray-500 mb-1">Nama Dokter</label>
+                            <input type="search" name="search" value="{{ $search }}" placeholder="Cari nama..."
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-primary focus:ring-red-200 p-3 text-sm">
+                        </div>
+
+                        <!-- 2. Filter Poli -->
+                        <div>
+                            <label for="poli_id" class="block text-xs font-bold text-gray-500 mb-1">Poli/Spesialisasi</label>
+                            <select name="poli_id" id="poli_id" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-primary focus:ring-red-200 p-3 text-sm">
+                                <option value="">Semua Poli</option>
+                                @foreach($polis as $poli)
+                                    <option value="{{ $poli->id }}" {{ $poliId == $poli->id ? 'selected' : '' }}>
+                                        {{ $poli->nama_poli }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <!-- 3. Filter Hari -->
+                        <div>
+                            <label for="hari" class="block text-xs font-bold text-gray-500 mb-1">Hari Praktik</label>
+                            <select name="hari" id="hari" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-primary focus:ring-red-200 p-3 text-sm">
+                                <option value="">Semua Hari</option>
+                                @foreach($listHari as $h)
+                                    <option value="{{ $h }}" {{ $hari == $h ? 'selected' : '' }}>
+                                        {{ $h }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <!-- 4. Tombol Aksi -->
+                        <div class="flex items-end space-x-3">
+                            <button type="submit"
+                                class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl shadow-lg text-white bg-primary hover:bg-red-800 transition transform hover:scale-[1.02]">
+                                Cari Dokter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {{-- Bagian Daftar Dokter --}}
+            @if ($dokters->isEmpty())
+                <div class="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="mt-2 text-xl font-bold text-gray-900">Tidak Ada Dokter Ditemukan</h3>
+                    <p class="mt-1 text-gray-500">
+                        Coba sesuaikan filter pencarian atau kata kunci.
+                    </p>
+                </div>
+            @else
+                <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    @foreach ($dokters as $dokter)
+                        <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100">
+                            {{-- Placeholder/Gambar Dokter --}}
+                            <div class="h-48 bg-red-100 flex items-center justify-center p-4 relative">
+                                <img src="{{ asset('images/dokter-' . $dokter->id . '.jpeg') }}" 
+                                     alt="Foto Dokter {{ $dokter->name }}" 
+                                     class="h-full w-full object-cover opacity-90"
+                                     onerror="this.onerror=null;this.src='https://placehold.co/400x300/fecaca/9f1239?text=Dokter+Jantung';">
+                                
+                                {{-- Badge Poli --}}
+                                <div class="absolute bottom-3 left-3">
+                                    <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md">
+                                        {{ $dokter->poli->nama_poli ?? 'Spesialis Umum' }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6">
+                                {{-- Nama Dokter --}}
+                                <h2 class="text-xl font-bold text-gray-900 truncate" title="{{ $dokter->name }}">
+                                    {{ $dokter->name }}
+                                </h2>
+
+                                {{-- Informasi Tambahan --}}
+                                <div class="mt-3 space-y-2 text-sm text-gray-600">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        <span class="font-medium">Jadwal:</span> {{ $dokter->schedules->count() > 0 ? $dokter->schedules->pluck('hari')->unique()->join(', ') : 'Belum Ada' }}
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /></svg>
+                                        <span>Pengalaman: 10+ Tahun</span>
+                                    </div>
+                                </div>
+                                
+                                {{-- Call to Action --}}
+                                <div class="mt-6">
+                                    @if(Auth::check() && Auth::user()->role === 'pasien')
+                                        <a href="{{ route('pasien.appointments.create', ['dokter_id' => $dokter->id]) }}" 
+                                           class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl shadow-lg text-white bg-primary hover:bg-red-700 transition">
+                                            Buat Janji Temu
+                                        </a>
+                                    @else
+                                        <a href="{{ route('login') }}" 
+                                           class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-gray-500 hover:bg-gray-600 transition">
+                                            Login untuk Booking
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                {{-- Pagination Links --}}
+                <div class="mt-10">
+                    {{ $dokters->links() }}
+                </div>
+            @endif
+        </div>
+    </main>
+
+</x-guest-master>

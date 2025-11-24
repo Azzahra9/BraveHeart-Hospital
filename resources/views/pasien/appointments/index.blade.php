@@ -70,6 +70,8 @@
                                     <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">Disetujui</span>
                                 @elseif($appt->status == 'Rejected')
                                     <span class="px-3 py-1 rounded-full bg-red-50 text-red-700 text-xs font-bold border border-red-100">Ditolak</span>
+                                @elseif($appt->status == 'Cancelled')
+                                     <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold border border-gray-200">Dibatalkan</span>
                                 @else
                                     <span class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold border border-green-100">Selesai</span>
                                 @endif
@@ -77,12 +79,20 @@
 
                             <!-- Aksi -->
                             <td class="px-6 py-4 text-center">
-                                @if($appt->status == 'Pending')
-                                    <span class="text-xs text-gray-400">Batalkan</span>
-                                @elseif($appt->status == 'Approved')
-                                     <button class="text-xs text-blue-600 font-bold hover:underline">Lihat Detail</button>
+                                @if($appt->status == 'Pending' || $appt->status == 'Approved')
+                                    <form action="{{ route('pasien.appointments.cancel', $appt->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan janji temu ini?');">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="text-xs font-bold text-red-500 hover:text-red-700 hover:underline">
+                                            Batalkan
+                                        </button>
+                                    </form>
+                                @elseif($appt->status == 'Rejected')
+                                    <span class="text-xs text-gray-400 italic">Hubungi CS</span>
+                                @elseif($appt->status == 'Cancelled')
+                                     <span class="text-xs text-gray-400">-</span>
                                 @else
-                                    <span class="text-xs text-gray-400">-</span>
+                                    <span class="text-xs text-gray-400">Riwayat Tersedia</span>
                                 @endif
                             </td>
                         </tr>
