@@ -80,12 +80,13 @@ class User extends Authenticatable
      */
     public function getProfilePhotoUrlAttribute()
     {
-        // Jika ada foto di database, buat URL-nya
-        if ($this->profile_photo_path) {
-            return Storage::url($this->profile_photo_path);
-        }
+    // Jika path foto ada di database
+    if ($this->profile_photo_path) {
+        // Kita paksa arahkan ke folder 'storage' di public
+        return asset('storage/' . $this->profile_photo_path);
+    }
 
-        // Jika tidak ada, pakai UI Avatars (Inisial Nama)
-        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+    // Jika tidak ada foto, pakai avatar default (inisial nama)
+    return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
     }
 }

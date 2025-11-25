@@ -82,37 +82,42 @@
             @else
                 <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     @foreach ($dokters as $dokter)
-                        <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100">
-                            {{-- Placeholder/Gambar Dokter --}}
-                            <div class="h-48 bg-red-100 flex items-center justify-center p-4 relative">
-                                <img src="{{ asset('images/dokter-' . $dokter->id . '.jpeg') }}" 
+                        <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+                            
+                            {{-- PERBAIKAN: Menggunakan profile_photo_url yang dinamis --}}
+                            <div class="h-56 bg-red-50 flex items-center justify-center relative overflow-hidden group">
+                                <img src="{{ $dokter->profile_photo_url }}" 
                                      alt="Foto Dokter {{ $dokter->name }}" 
-                                     class="h-full w-full object-cover opacity-90"
-                                     onerror="this.onerror=null;this.src='https://placehold.co/400x300/fecaca/9f1239?text=Dokter+Jantung';">
+                                     class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                     onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode($dokter->name) }}&background=random&size=400';">
                                 
+                                {{-- Overlay Gradient Halus --}}
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
                                 {{-- Badge Poli --}}
                                 <div class="absolute bottom-3 left-3">
-                                    <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md">
+                                    <span class="inline-flex items-center rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-bold text-primary shadow-sm border border-red-100">
                                         {{ $dokter->poli->nama_poli ?? 'Spesialis Umum' }}
                                     </span>
                                 </div>
                             </div>
                             
-                            <div class="p-6">
+                            <div class="p-6 flex-1 flex flex-col">
                                 {{-- Nama Dokter --}}
-                                <h2 class="text-xl font-bold text-gray-900 truncate" title="{{ $dokter->name }}">
+                                <h2 class="text-lg font-bold text-gray-900 line-clamp-1" title="{{ $dokter->name }}">
                                     {{ $dokter->name }}
                                 </h2>
 
                                 {{-- Informasi Tambahan --}}
-                                <div class="mt-3 space-y-2 text-sm text-gray-600">
-                                    <div class="flex items-center gap-2">
-                                        <svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                        <span class="font-medium">Jadwal:</span> {{ $dokter->schedules->count() > 0 ? $dokter->schedules->pluck('hari')->unique()->join(', ') : 'Belum Ada' }}
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /></svg>
-                                        <span>Pengalaman: 10+ Tahun</span>
+                                <div class="mt-4 space-y-2 text-sm text-gray-600 flex-1">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="h-4 w-4 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        <span class="font-medium leading-tight">
+                                            Jadwal: <br>
+                                            <span class="text-gray-500 font-normal">
+                                                {{ $dokter->schedules->count() > 0 ? $dokter->schedules->pluck('hari')->unique()->join(', ') : 'Belum Ada Jadwal' }}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                                 
@@ -120,14 +125,18 @@
                                 <div class="mt-6">
                                     @if(Auth::check() && Auth::user()->role === 'pasien')
                                         <a href="{{ route('pasien.appointments.create', ['dokter_id' => $dokter->id]) }}" 
-                                           class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl shadow-lg text-white bg-primary hover:bg-red-700 transition">
-                                            Buat Janji Temu
+                                           class="w-full inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-bold rounded-xl shadow-md text-white bg-primary hover:bg-red-800 transition focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                            Buat Janji
                                         </a>
-                                    @else
+                                    @elseif(!Auth::check())
                                         <a href="{{ route('login') }}" 
-                                           class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-gray-500 hover:bg-gray-600 transition">
+                                           class="w-full inline-flex items-center justify-center px-4 py-2.5 border border-gray-200 text-sm font-bold rounded-xl shadow-sm text-gray-700 bg-white hover:bg-gray-50 hover:text-primary transition">
                                             Login untuk Booking
                                         </a>
+                                    @else
+                                        <button disabled class="w-full inline-flex items-center justify-center px-4 py-2.5 border border-gray-200 text-sm font-bold rounded-xl text-gray-400 bg-gray-50 cursor-not-allowed">
+                                            Khusus Pasien
+                                        </button>
                                     @endif
                                 </div>
                             </div>

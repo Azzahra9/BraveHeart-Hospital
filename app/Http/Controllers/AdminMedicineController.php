@@ -10,10 +10,54 @@ class AdminMedicineController extends Controller
 {
     /**
      * Menampilkan daftar obat
+     * Fitur: Search, Filter Stok, Sorting
      */
-    public function index()
+    public function index(Request $request)
     {
-        $medicines = Medicine::latest()->paginate(10);
+        $query = Medicine::query();
+
+        // 1. LOGIKA PENCARIAN (Search)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('nama', 'like', "%{$search}%");
+        }
+
+        // 2. LOGIKA FILTER (Berdasarkan Stok)
+        if ($request->filled('stock')) {
+            if ($request->stock === 'available') {
+                $query->where('stok', '>', 0);
+            } elseif ($request->stock === 'out_of_stock') {
+                $query->where('stok', '<=', 0);
+            }
+        }
+
+        // 3. LOGIKA SORTING (Urutan)
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'name_asc':
+                    $query->orderBy('nama', 'asc');
+                    break;
+                case 'stock_low':
+                    $query->orderBy('stok', 'asc');
+                    break;
+                case 'stock_high':
+                    $query->orderBy('stok', 'desc');
+                    break;
+                case 'newest':
+                    $query->latest();
+                    break;
+                default:
+                    $query->latest();
+                    break;
+            }
+        } else {
+            // Default urutan terbaru
+            $query->latest();
+        }
+
+        // Eksekusi Query dengan Pagination & Query String
+        $medicines = $query->paginate(10)->withQueryString();
+        
         return view('admin.medicines.index', compact('medicines'));
     }
 

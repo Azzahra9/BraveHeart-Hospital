@@ -3,7 +3,7 @@
         {{ __('Akun Internal (Staf)') }}
     </x-slot>
 
-    <!-- 1. STATISTIK STAF (BARU) -->
+    <!-- 1. STATISTIK STAF -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Card Dokter -->
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
@@ -36,7 +36,49 @@
         </div>
     </div>
 
-    <!-- 2. TABEL MODERN -->
+    <!-- 2. TOOLBAR PENCARIAN & FILTER (BARU) -->
+    <div class="mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <form method="GET" action="{{ url()->current() }}" class="flex flex-col md:flex-row gap-4 justify-between items-center">
+            
+            <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                <!-- Filter Role -->
+                <select name="role" onchange="this.form.submit()" class="border-gray-200 rounded-xl text-sm focus:ring-primary focus:border-primary text-gray-600 bg-gray-50/50">
+                    <option value="">Semua Jabatan</option>
+                    <option value="dokter" {{ request('role') == 'dokter' ? 'selected' : '' }}>Hanya Dokter</option>
+                    <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Hanya Admin</option>
+                </select>
+
+                <!-- Sorting -->
+                <select name="sort" onchange="this.form.submit()" class="border-gray-200 rounded-xl text-sm focus:ring-primary focus:border-primary text-gray-600 bg-gray-50/50">
+                    <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Terbaru Ditambahkan</option>
+                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama Ditambahkan</option>
+                    <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Nama (A-Z)</option>
+                    <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Nama (Z-A)</option>
+                </select>
+            </div>
+
+            <div class="flex gap-2 w-full md:w-auto">
+                <!-- Search Bar -->
+                <div class="relative w-full md:w-64">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau email..." 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm bg-gray-50/50">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </div>
+                
+                <!-- Reset Button (Muncul jika ada filter aktif) -->
+                @if(request()->hasAny(['search', 'role', 'sort']))
+                    <a href="{{ url()->current() }}" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition flex items-center justify-center" title="Reset Filter">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </a>
+                @endif
+            </div>
+
+        </form>
+    </div>
+
+    <!-- 3. TABEL MODERN -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" x-data="{ showDetail: false, activeUser: {} }">
         <div class="overflow-x-auto">
             <table class="min-w-full text-left text-sm">
@@ -49,7 +91,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @foreach($users as $user)
+                    @forelse($users as $user)
                     <tr class="hover:bg-gray-50 transition">
                         <!-- Kolom Nama -->
                         <td class="px-6 py-4">
@@ -92,7 +134,7 @@
                             @endif
                         </td>
 
-                        <!-- Kolom Aksi (Konsisten Merah) -->
+                        <!-- Kolom Aksi -->
                         <td class="px-6 py-4 text-center">
                             <div class="flex justify-center gap-2">
                                 <!-- Tombol Lihat Detail (Mata) -->
@@ -122,7 +164,13 @@
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">
+                            Tidak ada data staf yang cocok dengan pencarian Anda.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -131,7 +179,7 @@
             {{ $users->links() }}
         </div>
 
-        <!-- MODAL DETAIL USER (AESTHETIC) -->
+        <!-- MODAL DETAIL USER (SAMA SEPERTI SEBELUMNYA) -->
         <div x-show="showDetail" 
              class="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6"
              style="display: none;">
@@ -139,7 +187,6 @@
             <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="showDetail = false"></div>
 
             <div class="relative bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 transform transition-all scale-100 text-center">
-                <!-- Tombol Close -->
                 <button @click="showDetail = false" class="absolute top-4 right-4 text-gray-300 hover:text-gray-500">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>

@@ -12,16 +12,57 @@ class AdminUserController extends Controller
 {
     /**
      * DAFTAR AKUN INTERNAL (Admin & Dokter)
+     * Fitur: Search, Filter Role, Sorting
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('poli')
-                    ->whereIn('role', ['admin', 'dokter'])
-                    ->where('id', '!=', auth()->id())
-                    ->latest()
-                    ->paginate(10);
+        // 1. Inisialisasi Query Dasar (Ambil Admin & Dokter, kecuali diri sendiri)
+        $query = User::with('poli')
+                     ->whereIn('role', ['admin', 'dokter'])
+                     ->where('id', '!=', auth()->id());
+
+        // 2. LOGIKA PENCARIAN (Search)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // 3. LOGIKA FILTER (Berdasarkan Role: Admin/Dokter)
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+
+        // 4. LOGIKA SORTING (Urutan)
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'name_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+                case 'oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+                case 'newest':
+                    $query->latest();
+                    break;
+                default:
+                    $query->latest();
+                    break;
+            }
+        } else {
+            // Default urutan terbaru
+            $query->latest();
+        }
+
+        // Eksekusi Query dengan Pagination & Query String (agar filter tidak hilang saat pindah hal)
+        $users = $query->paginate(10)->withQueryString();
         
-        // DATA STATISTIK UNTUK UI
+        // DATA STATISTIK UNTUK UI (Tetap Hitung Semua Data Tanpa Filter)
         $total_dokter = User::where('role', 'dokter')->count();
         $total_admin = User::where('role', 'admin')->count();
                     
@@ -30,12 +71,44 @@ class AdminUserController extends Controller
 
     /**
      * DAFTAR PASIEN
+     * Fitur: Search, Sorting
      */
-    public function patients()
+    public function patients(Request $request)
     {
-        $patients = User::where('role', 'pasien')
-                        ->latest()
-                        ->paginate(10);
+        // 1. Inisialisasi Query Dasar (Hanya Pasien)
+        $query = User::where('role', 'pasien');
+
+        // 2. LOGIKA PENCARIAN (Search)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // 3. LOGIKA SORTING (Urutan)
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'name_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+                case 'oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+                default:
+                    $query->latest();
+                    break;
+            }
+        } else {
+            $query->latest();
+        }
+
+        // Eksekusi Query
+        $patients = $query->paginate(10)->withQueryString();
         
         // DATA STATISTIK
         $total_pasien = User::where('role', 'pasien')->count();

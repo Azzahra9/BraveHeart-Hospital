@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Appointment;
-use App\Models\MedicalRecord;
 use Carbon\Carbon;
 
 /*
@@ -39,7 +38,7 @@ Route::get('/dashboard', function () {
 // --- 3. ROUTE GROUP: ADMIN ---
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     
-    // Dashboard Admin
+    // Dashboard Admin (Bisa tetap di sini atau dipindah ke controller biar rapi)
     Route::get('/dashboard', function () {
         $data = [
             'total_pasien' => User::where('role', 'pasien')->count(),
@@ -67,75 +66,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // --- 4. ROUTE GROUP: DOKTER ---
 Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->name('dokter.')->group(function () {
     
-    // Dashboard Dokter (MENGIRIM DATA GRAFIK & REAL REVENUE)
-    Route::get('/dashboard', function () {
-        $dokterId = Auth::id();
-        $bulan = [];
-        $data_periksa = [];
-        $data_pending = [];
-        
-        // Asumsi Biaya per Tindakan (Rp 200.000)
-        $BIAYA_TINDAKAN = 200000;
-        
-        // 1. GENERATE DATA GRAFIK UNTUK CHART.JS (6 BULAN TERAKHIR)
-        for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
-            $bulan[] = $date->translatedFormat('M');
-
-            $count_periksa = MedicalRecord::where('dokter_id', $dokterId)
-                ->whereMonth('tanggal', $date->month)
-                ->whereYear('tanggal', $date->year)
-                ->count();
-                
-            $data_periksa[] = $count_periksa;
-                
-            $data_pending[] = Appointment::where('dokter_id', $dokterId)
-                ->whereIn('status', ['Pending', 'Approved'])
-                ->whereMonth('created_at', $date->month)
-                ->whereYear('created_at', $date->year)
-                ->count();
-        }
-
-        // 2. DATA STATISTIK CARD
-        $todayAppointments = Appointment::where('dokter_id', $dokterId)
-            ->where('status', 'Approved')
-            ->whereDate('tanggal_booking', Carbon::today())
-            ->count();
-
-        $myPendingCount = Appointment::where('dokter_id', $dokterId)
-            ->where('status', 'Pending')
-            ->count();
-        
-        // HITUNG DATA REAL BARU
-        $totalRecords = MedicalRecord::where('dokter_id', $dokterId)->count();
-        $totalRevenue = $totalRecords * $BIAYA_TINDAKAN;
-
-        // 3. Data Tabel (5 appointment terbaru)
-        $appointments = Appointment::with('pasien')
-            ->where('dokter_id', $dokterId)
-            ->latest()
-            ->take(5)
-            ->get();
-
-        // 4. Data Pasien Terakhir Diperiksa
-        $lastPatients = MedicalRecord::with('pasien')
-            ->where('dokter_id', $dokterId)
-            ->latest('tanggal')
-            ->take(5)
-            ->get();
-
-        return view('dokter.dashboard', compact(
-            'todayAppointments', 
-            'myPendingCount', 
-            'appointments', 
-            'lastPatients',
-            'bulan', 
-            'data_periksa', 
-            'data_pending',
-            'totalRecords', 
-            'totalRevenue'  
-        ));
-    })->name('dashboard');
+    // ✅ PERBAIKAN: Gunakan Controller agar grafik tidak error
+    Route::get('/dashboard', [\App\Http\Controllers\DokterDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('schedules', \App\Http\Controllers\DokterScheduleController::class);
     
@@ -149,31 +81,8 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->name('dokter.')->g
 // --- 5. ROUTE GROUP: PASIEN ---
 Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->name('pasien.')->group(function () {
     
-    // Dashboard Pasien (MENGIRIM DATA PASIEN)
-    Route::get('/dashboard', function () {
-        $pasienId = Auth::id();
-
-        // Data Janji Temu Terbaru
-        $latestAppointment = Appointment::with(['dokter.poli', 'schedule'])
-            ->where('pasien_id', $pasienId)
-            ->latest()
-            ->first();
-        
-        // Data Riwayat Medis Singkat
-        $lastRecord = MedicalRecord::with(['dokter', 'appointment'])
-            ->where('pasien_id', $pasienId)
-            ->latest('tanggal')
-            ->first();
-
-        // Dokter yang Direkomendasikan/Tersedia (Ambil 4 Dokter teratas)
-        $availableDoctors = User::with('poli')
-            ->where('role', 'dokter')
-            ->inRandomOrder()
-            ->take(4)
-            ->get();
-
-        return view('pasien.dashboard', compact('latestAppointment', 'lastRecord', 'availableDoctors'));
-    })->name('dashboard');
+    // ✅ PERBAIKAN: Gunakan Controller agar fitur Search berfungsi
+    Route::get('/dashboard', [\App\Http\Controllers\PasienDashboardController::class, 'index'])->name('dashboard');
 
     // Appointments (Booking)
     Route::resource('appointments', \App\Http\Controllers\PasienAppointmentController::class)->only(['index', 'create', 'store', 'show']);
