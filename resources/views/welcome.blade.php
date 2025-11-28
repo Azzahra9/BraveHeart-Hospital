@@ -222,57 +222,98 @@
                 @endforeach
             </div>
         </div>
-    </section>
+    <section class="py-28 bg-white relative overflow-hidden">
 
-    <!-- 4. LAYANAN KELAS DUNIA (REVISI: FOTO KANAN) -->
-    <section class="py-24 bg-red-50/30 relative overflow-hidden">
-         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-             
-             <!-- Kiri: Teks & Kartu Layanan -->
-             <div>
-                 <h2 class="text-3xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-                     Layanan Kesehatan <br> <span class="text-red-700">Kelas Dunia.</span>
-                 </h2>
-                 
-                 <p class="text-gray-600 text-lg mb-10 font-light leading-relaxed">
-                     Kami menyediakan fasilitas medis terlengkap dengan standar internasional untuk kenyamanan dan keselamatan pasien kami.
-                 </p>
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <div class="relative z-10">
+            
+            <h2 class="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight mb-8">
+                Layanan Kesehatan <br> <span class="text-rose-800">Kelas Dunia.</span>
+            </h2>
+            
+            <p class="text-gray-600 text-xl mb-10 font-light leading-relaxed max-w-3xl">
+                Kami menyediakan fasilitas medis terlengkap dengan standar internasional. Prioritas kami adalah memberikan kenyamanan, keselamatan, dan penanganan cepat bagi Anda dan keluarga.
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-rose-200 hover:shadow-lg transition-all group">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 bg-rose-100 rounded-xl flex items-center justify-center text-rose-700 shrink-0 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl text-gray-900">Farmasi Lengkap</h3>
+                            <p class="text-sm text-gray-500 mt-1">Tersedia 24 jam non-stop.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all group">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shrink-0 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl text-gray-900">Rekam Medis</h3>
+                            <p class="text-sm text-gray-500 mt-1">Terintegrasi & Aman.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-red-200 transition group">
-                         <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 mb-4 group-hover:scale-110 transition-transform">
-                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                         </div>
-                         <h3 class="font-bold text-lg text-gray-900 mb-1">Farmasi Lengkap</h3>
-                         <p class="text-sm text-gray-500">Obat-obatan lengkap 24 jam.</p>
-                     </div>
-                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-blue-200 transition group">
-                         <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
-                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                         </div>
-                         <h3 class="font-bold text-lg text-gray-900 mb-1">Rekam Medis</h3>
-                         <p class="text-sm text-gray-500">Akses riwayat kesehatan aman.</p>
-                     </div>
-                 </div>
+            <a href="{{ route('guest.polis') }}" class="inline-flex items-center gap-3 px-10 py-4 bg-gray-900 text-white rounded-full text-lg font-bold hover:bg-rose-800 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                Lihat Tim Dokter 
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+        </div>
 
-                 <a href="{{ route('guest.polis') }}" class="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 text-white rounded-full font-bold hover:bg-red-700 transition shadow-lg">
-                     Lihat Semua Layanan 
-                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                 </a>
-             </div>
+        <div class="relative h-[550px] lg:h-[650px] flex items-end justify-center mt-12 lg:mt-0">
+            
+            <div class="absolute bottom-0 w-[100%] h-[95%] bg-gradient-to-t from-rose-950 via-rose-900 to-rose-800 rounded-t-[12rem] border-4 border-white shadow-2xl -z-20"></div>
 
-             <!-- Kanan: FOTO DOKTER (Area Khusus) -->
-             <div class="relative flex justify-center lg:justify-end h-[500px] items-end">
-                 <!-- Elemen Dekoratif -->
-                 <div class="absolute bottom-0 w-full h-[80%] bg-gradient-to-t from-red-100 to-transparent rounded-t-[3rem] -z-10"></div>
-                 
-                 <!-- TEMPAT FOTO (Ganti src ini dengan foto PNG Anda) -->
-                 <img src="https://png.pngtree.com/png-vector/20240528/ourmid/pngtree-doctor-explain-to-patient-png-image_12516688.png" 
-                      class="relative z-10 h-full object-contain drop-shadow-xl" 
-                      alt="Dokter Profesional">
-             </div>
-         </div>
-    </section>
+            <img src="{{ asset('images/andijingga.png') }}" 
+                 class="absolute left-0 lg:-left-24 bottom-0 w-auto h-[92%] object-contain z-10 transition-transform duration-300 hover:scale-105 drop-shadow-glow" 
+                 alt="Dokter Kiri">
+
+            <img src="{{ asset('images/kak_aliyah.png') }}" 
+                 class="absolute right-0 lg:right-4 bottom-0 w-auto h-[92%] object-contain z-20 transition-transform duration-300 hover:scale-105 drop-shadow-glow" 
+                 alt="Dokter Kanan">
+
+
+            <div class="absolute bottom-12 -right-2 lg:-right-8 z-30 flex flex-col gap-4 items-end">
+                <div class="bg-white p-3 rounded-xl shadow-lg border border-red-50 flex items-center gap-3 animate-bounce" style="animation-duration: 4s;">
+                    <div class="bg-yellow-100 p-2 rounded-full text-yellow-600">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-semibold">Kepuasan Pasien</p>
+                        <p class="text-sm font-bold text-gray-900">4.9/5.0 ⭐</p>
+                    </div>
+                </div>
+                <div class="bg-white/95 backdrop-blur-sm px-6 py-4 rounded-2xl shadow-xl border-l-4 border-rose-800">
+                    <div class="flex items-center gap-3">
+                         <div class="flex -space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=1" class="w-full h-full object-cover"></div>
+                            <div class="w-10 h-10 rounded-full bg-gray-200 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=5" class="w-full h-full object-cover"></div>
+                            <div class="w-10 h-10 rounded-full bg-rose-100 border-2 border-white flex items-center justify-center text-xs font-bold text-rose-700">+12</div>
+                        </div>
+                        <div>
+                            <p class="text-base font-bold text-gray-900">Tim Dokter Spesialis</p>
+                            <p class="text-xs text-rose-700 font-medium">Siap Melayani 24/7</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<style>
+    .drop-shadow-glow {
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+    }
+</style>
 
     <!-- 5. DOKTER SECTION (UPDATED: INSTAGRAM ICON) -->
     <section id="dokter" class="py-24 bg-white">
