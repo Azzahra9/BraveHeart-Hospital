@@ -5,47 +5,59 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class DokterAppointmentController extends Controller
 {
     /**
-     * Menampilkan daftar janji temu khusus dokter yang login
+     * Menampilkan daftar janji temu untuk dokter yang login
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil appointment dimana dokter_id adalah user yang login
-        $appointments = Appointment::with(['pasien', 'schedule'])
-                                   ->where('dokter_id', Auth::id())
-                                   ->latest()
-                                   ->paginate(10);
+        // 1. Hitung statistik ringkas (Tetap hitung total global, tidak terpengaruh search)
+        $pendingCount = Appointment::where('dokter_id', Auth::id())
+            ->where('status', 'Pending')
+            ->count();
 
-        // Hitung statistik sederhana untuk dashboard kecil di atas tabel
-        $pendingCount = Appointment::where('dokter_id', Auth::id())->where('status', 'Pending')->count();
         $todayCount = Appointment::where('dokter_id', Auth::id())
-                                 ->where('status', 'Approved')
-                                 ->whereDate('tanggal_booking', today())
-                                 ->count();
+            ->where('status', 'Approved')
+            ->whereDate('tanggal_booking', Carbon::today())
+            ->count();
+
+        // 2. Ambil daftar appointment dengan Filter Pencarian
+        $appointments = Appointment::with(['pasien', 'schedule', 'medicalRecord']) // Load relasi medicalRecord
+            ->where('dokter_id', Auth::id())
+            // Logika Pencarian: Jika ada parameter 'search', cari berdasarkan nama pasien
+            ->when($request->search, function ($query, $search) {
+                return $query->whereHas('pasien', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('tanggal_booking', 'desc')
+            ->paginate(10);
 
         return view('dokter.appointments.index', compact('appointments', 'pendingCount', 'todayCount'));
     }
 
     /**
-     * Update status janji temu (Approve / Reject / Selesai)
+     * Update status janji temu (Approve / Reject)
      */
     public function updateStatus(Request $request, $id)
     {
-        $appointment = Appointment::where('id', $id)->where('dokter_id', Auth::id())->firstOrFail();
-
         $request->validate([
-            'status' => 'required|in:Approved,Rejected,Selesai',
+            'status' => 'required|in:Approved,Rejected',
         ]);
+
+        $appointment = Appointment::where('id', $id)
+            ->where('dokter_id', Auth::id())
+            ->firstOrFail();
 
         $appointment->update([
             'status' => $request->status
         ]);
 
-        $message = 'Status janji temu berhasil diperbarui menjadi ' . $request->status;
-        
+        $message = $request->status == 'Approved' ? 'Janji temu disetujui.' : 'Janji temu ditolak.';
+
         return redirect()->back()->with('success', $message);
     }
 }
