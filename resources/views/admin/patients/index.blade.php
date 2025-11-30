@@ -11,9 +11,7 @@
             deleteUrl: ''
          }">
 
-        <!-- 1. HEADER BANNER (Modern Slim) -->
         <div class="relative bg-gradient-to-r from-red-900 to-red-800 rounded-[2.5rem] p-8 text-white shadow-xl shadow-red-900/20 flex flex-col md:flex-row justify-between items-center overflow-hidden gap-6">
-            <!-- Texture -->
             <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
             <div class="absolute top-0 right-0 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl -mt-20 -mr-20 pointer-events-none"></div>
             
@@ -32,12 +30,9 @@
             </div>
         </div>
 
-        <!-- 2. STATISTIK & FILTER -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- Kartu Statistik -->
             <div class="lg:col-span-1 grid grid-cols-2 gap-4">
-                <!-- Total Pasien -->
                 <div class="bg-white p-5 rounded-[2rem] shadow-lg shadow-gray-200/50 border border-white hover:border-blue-100 transition-all group">
                     <div class="h-10 w-10 flex items-center justify-center bg-blue-50 text-blue-600 rounded-xl mb-3 group-hover:scale-110 transition-transform">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -46,7 +41,6 @@
                     <h3 class="text-2xl font-extrabold text-gray-900">{{ $total_pasien }}</h3>
                 </div>
 
-                <!-- Baru Hari Ini -->
                 <div class="bg-white p-5 rounded-[2rem] shadow-lg shadow-gray-200/50 border border-white hover:border-green-100 transition-all group">
                     <div class="h-10 w-10 flex items-center justify-center bg-green-50 text-green-600 rounded-xl mb-3 group-hover:scale-110 transition-transform">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -56,11 +50,9 @@
                 </div>
             </div>
 
-            <!-- Toolbar Filter -->
             <div class="lg:col-span-2 bg-white p-6 rounded-[2rem] shadow-lg shadow-gray-200/50 border border-white flex flex-col justify-center">
                 <form method="GET" action="{{ url()->current() }}" class="flex flex-col md:flex-row gap-4 items-center">
                     
-                    <!-- Sorting -->
                     <div class="w-full md:w-auto relative">
                         <select name="sort" onchange="this.form.submit()" class="w-full md:w-auto appearance-none pl-4 pr-10 py-2.5 border-gray-200 rounded-xl text-sm focus:ring-red-500 focus:border-red-500 text-gray-600 bg-gray-50 font-medium cursor-pointer hover:bg-gray-100 transition">
                             <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Terbaru Mendaftar</option>
@@ -73,7 +65,6 @@
                         </div>
                     </div>
 
-                    <!-- Search -->
                     <div class="flex-1 w-full relative">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau email pasien..." 
                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 text-sm bg-white shadow-sm font-medium placeholder-gray-400">
@@ -91,7 +82,6 @@
             </div>
         </div>
 
-        <!-- 3. TABEL DATA PASIEN -->
         <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-white flex flex-col overflow-hidden">
             <div class="px-8 py-6 border-b border-gray-100 bg-gray-50/30">
                 <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
@@ -106,14 +96,12 @@
                         <tr>
                             <th class="px-8 py-4">Profil Pasien</th>
                             <th class="px-6 py-4">Kontak</th>
-                            <th class="px-6 py-4">Status Akun</th>
                             <th class="px-6 py-4 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50 text-sm">
                         @forelse($patients as $patient)
                         <tr class="hover:bg-blue-50/30 transition duration-200 group">
-                            <!-- Kolom Profil -->
                             <td class="px-8 py-5">
                                 <div class="flex items-center gap-4">
                                     <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-md border-2 border-white group-hover:scale-110 transition-transform">
@@ -126,7 +114,6 @@
                                 </div>
                             </td>
                             
-                            <!-- Kolom Kontak -->
                             <td class="px-6 py-5 text-gray-600 font-medium">
                                 <div class="flex items-center gap-2">
                                     <svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
@@ -134,39 +121,22 @@
                                 </div>
                             </td>
 
-                            <!-- Kolom Status -->
-                            <td class="px-6 py-5">
-                                @if($patient->email_verified_at)
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-full bg-green-50 text-green-700 border border-green-100">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Terverifikasi
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-full bg-gray-100 text-gray-600 border border-gray-200">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Belum Verifikasi
-                                    </span>
-                                @endif
-                            </td>
-
-                            <!-- Kolom Aksi -->
                             <td class="px-6 py-5 text-center">
                                 <div class="flex justify-center gap-2">
-                                    <!-- Tombol Lihat Detail -->
                                     <button @click="showDetail = true; activePatient = { 
-                                        name: '{{ $patient->name }}', 
-                                        email: '{{ $patient->email }}', 
-                                        id: '#PAT-{{ str_pad($patient->id, 4, '0', STR_PAD_LEFT) }}',
-                                        joined: '{{ $patient->created_at->format('d M Y') }}',
-                                        initial: '{{ substr($patient->name, 0, 1) }}'
-                                    }" class="p-2 bg-white text-blue-500 hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition shadow-sm" title="Lihat Detail">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            name: '{{ $patient->name }}', 
+                                            email: '{{ $patient->email }}', 
+                                            id: '#PAT-{{ str_pad($patient->id, 4, '0', STR_PAD_LEFT) }}',
+                                            joined: '{{ $patient->created_at->format('d M Y') }}',
+                                            initial: '{{ substr($patient->name, 0, 1) }}'
+                                        }" class="p-2 bg-white text-blue-500 hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition shadow-sm" title="Lihat Detail">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                     </button>
 
-                                    <!-- Tombol Edit -->
                                     <a href="{{ route('admin.users.edit', $patient->id) }}" class="p-2 bg-white text-gray-400 hover:text-gray-900 hover:bg-gray-50 rounded-xl border border-gray-100 hover:border-gray-300 transition shadow-sm" title="Edit Data">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     </a>
                                     
-                                    <!-- Tombol Hapus (Trigger Modal) -->
                                     <button @click="showDeleteModal = true; deleteUrl = '{{ route('admin.users.destroy', $patient->id) }}'" 
                                             class="p-2 bg-white text-red-300 hover:text-red-600 hover:bg-red-50 rounded-xl border border-gray-100 hover:border-red-200 transition shadow-sm" 
                                             title="Hapus Data">
@@ -177,7 +147,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center text-gray-400 italic">
+                            <td colspan="3" class="px-6 py-12 text-center text-gray-400 italic">
                                 <div class="flex flex-col items-center justify-center gap-2">
                                     <div class="bg-gray-50 p-3 rounded-full">
                                         <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -196,9 +166,6 @@
             </div>
         </div>
 
-        <!-- 4. MODAL POPUP (AlpineJS) -->
-        
-        <!-- Detail Modal -->
         <div x-show="showDetail" 
              class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
              style="display: none;"
@@ -244,7 +211,6 @@
             </div>
         </div>
 
-        <!-- Delete Modal -->
         <div x-show="showDeleteModal" 
              style="display: none;"
              class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
