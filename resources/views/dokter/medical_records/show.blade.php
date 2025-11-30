@@ -3,15 +3,12 @@
         {{ __('Detail Rekam Medis') }}
     </x-slot>
 
-    <!-- HEADER DEKORATIF (Slim) -->
     <div class="bg-gradient-to-r from-red-900 to-red-800 py-8 px-4 sm:px-6 lg:px-8 shadow-lg relative overflow-hidden rounded-b-[50px] mx-0 mt-0 z-0">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mt-10 -mr-10 pointer-events-none"></div>
         <div class="max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <!-- Judul Utama (Font disesuaikan) -->
                 <h1 class="text-xl sm:text-2xl font-bold text-white mb-3">Laporan Pemeriksaan</h1>
                 
-                <!-- Badge & Tanggal (Jarak diperlebar, Font diperjelas) -->
                 <div class="flex items-center gap-4 text-red-50 text-sm font-medium">
                     <span class="bg-white/20 px-3 py-1 rounded-lg border border-white/10 tracking-wide">
                         #MR-{{ $medicalRecord->id }}

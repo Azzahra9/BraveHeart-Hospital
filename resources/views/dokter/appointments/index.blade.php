@@ -3,12 +3,10 @@
         {{ __('Janji Temu Masuk') }}
     </x-slot>
 
-    <!-- Container Utama dengan AlpineJS untuk Modal -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8" x-data="{ showRejectModal: false, rejectUrl: '' }">
 
         <!-- 1. STATISTIK RINGKAS (Modern Cards) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Menunggu Konfirmasi -->
             <div class="bg-white p-6 rounded-[2rem] shadow-lg shadow-gray-200/50 border border-white hover:border-orange-100 transition-all group relative overflow-hidden">
                 <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-400"></div>
                 <div class="flex items-center gap-4 relative z-10">

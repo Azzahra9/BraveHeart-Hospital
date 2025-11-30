@@ -3,7 +3,7 @@
         {{ __('Tambah User Baru') }}
     </x-slot>
 
-    <!-- HEADER DEKORATIF (Slim) -->
+    <!-- HEADER  -->
     <div class="bg-gradient-to-r from-red-900 to-red-800 py-8 px-4 sm:px-6 lg:px-8 shadow-lg relative overflow-hidden rounded-b-[50px] mx-0 mt-0 z-0">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mt-10 -mr-10 pointer-events-none"></div>
         <div class="max-w-2xl mx-auto relative z-10 text-center">
@@ -15,7 +15,6 @@
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pb-12">
         <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-white p-8 relative overflow-hidden">
             
-            <!-- Texture Pattern Background -->
             <div class="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#7F1D1D_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
             <form method="POST" action="{{ route('admin.users.store') }}" class="relative z-10 space-y-6">
@@ -53,7 +52,7 @@
                         </div>
                     </div>
 
-                    <!-- Poli Selection (Hidden by Default) -->
+                    <!-- Poli Selection -->
                     <div id="poli-container" class="hidden transition-all duration-300">
                         <label for="poli_id" class="block text-sm font-bold text-gray-700 mb-2">Spesialis Poli <span class="text-red-500">*</span></label>
                         <div class="relative">
@@ -119,7 +118,7 @@
             } else {
                 poliContainer.classList.add('hidden');
                 poliContainer.classList.remove('block');
-                document.getElementById('poli_id').value = ""; // Reset nilai
+                document.getElementById('poli_id').value = ""; 
             }
         }
     </script>

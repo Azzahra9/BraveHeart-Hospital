@@ -10,7 +10,7 @@
             activeMedicineName: '' 
          }">
 
-        <!-- 1. HEADER BANNER (Modern Slim) -->
+        <!-- 1. HEADER BANNER -->
         <div class="relative bg-gradient-to-r from-red-900 to-red-800 rounded-[2.5rem] p-8 text-white shadow-xl shadow-red-900/20 flex flex-col md:flex-row justify-between items-center overflow-hidden gap-6">
             <!-- Texture Pattern -->
             <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>

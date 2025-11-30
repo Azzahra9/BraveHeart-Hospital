@@ -56,17 +56,13 @@
             </div>
         @endif
 
-        <!-- 1. WELCOME BANNER (Gradient Maroon & Texture) - VERSI LEBIH SLIM -->
-        <!-- Update: padding dikurangi menjadi py-6 px-8, rounded dikurangi, avatar diperkecil -->
         <div class="relative bg-gradient-to-r from-red-900 to-red-800 rounded-[2rem] py-6 px-8 text-white shadow-xl shadow-red-900/20 flex flex-col md:flex-row justify-between items-center overflow-hidden gap-6">
-            <!-- Texture Pattern -->
             <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
             <div class="absolute top-0 right-0 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl -mt-20 -mr-20 pointer-events-none"></div>
             
             <!-- Info Pasien -->
             <div class="relative z-10 flex items-center gap-5 w-full md:w-auto">
                 <div class="group relative">
-                    <!-- Avatar diperkecil dari h-20 menjadi h-16 agar lebih slim -->
                     <div class="h-16 w-16 rounded-full p-1 bg-white/10 backdrop-blur-sm border border-white/20">
                         <img class="h-full w-full object-cover rounded-full" 
                             src="{{ Auth::user()->profile_photo_url }}" 
@@ -83,7 +79,6 @@
 
             <!-- Aksi Cepat -->
             <div class="relative z-10 flex flex-wrap gap-3 w-full md:w-auto justify-start md:justify-end">
-                <!-- Tombol Edit Profil Dikembalikan -->
                 <a href="{{ route('profile.edit') }}" class="group bg-white/10 hover:bg-white/20 border border-white/20 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm backdrop-blur-md transition flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                     Edit Profil
@@ -182,7 +177,6 @@
         <!-- 4. MAIN CONTENT (Search & Table) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- KOLOM KIRI (2/3): TABEL RIWAYAT -->
             <div class="lg:col-span-2 space-y-6">
                 
                 <!-- Toolbar Pencarian -->

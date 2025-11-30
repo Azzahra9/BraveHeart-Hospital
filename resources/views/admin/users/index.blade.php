@@ -3,7 +3,6 @@
         {{ __('Akun Internal (Staf)') }}
     </x-slot>
 
-    <!-- Container dengan AlpineJS untuk Modal Detail & Hapus -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8" 
          x-data="{ 
             showDetail: false, 
@@ -12,7 +11,7 @@
             deleteUrl: ''
          }">
 
-        <!-- 1. HEADER BANNER (Modern) -->
+        <!-- 1. HEADER BANNER  -->
         <div class="relative bg-gradient-to-r from-red-900 to-red-800 rounded-[2.5rem] p-8 text-white shadow-xl shadow-red-900/20 flex flex-col md:flex-row justify-between items-center overflow-hidden gap-6">
             <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
             <div class="absolute top-0 right-0 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl -mt-20 -mr-20 pointer-events-none"></div>

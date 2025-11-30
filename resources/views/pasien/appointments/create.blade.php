@@ -4,19 +4,15 @@
     </x-slot>
 
     @php
-        // --- LOGIKA PERSIAPAN DATA ---
         $tomorrow = \Carbon\Carbon::tomorrow()->format('Y-m-d');
         
-        // Ambil ID dari Controller/URL
         $poliId = $selectedPoliId ?? request('poli_id');
         $docId = $doctorId ?? request('dokter_id');
 
-        // Lookup Nama untuk Tampilan
         $poliName = $poliId ? (\App\Models\Poli::find($poliId)->nama_poli ?? '-') : '-';
         $docName = $docId ? (\App\Models\User::find($docId)->name ?? '-') : '-';
         $docPhoto = $docId ? (\App\Models\User::find($docId)->profile_photo_url ?? '') : '';
 
-        // Tentukan Step Awal
         $currentStep = 1;
         if ($docId) {
             $currentStep = 3; 
@@ -24,10 +20,8 @@
             $currentStep = 2;
         }
 
-        // Grouping Jadwal
         $schedulesByDay = isset($availableSchedules) ? $availableSchedules->groupBy('hari') : collect([]);
 
-        // Icon Mapping
         $poliIcons = [
             'jantung' => 'heart-pulse',
             'kardiologi' => 'heart-pulse',
@@ -41,9 +35,7 @@
     @endphp
 
     <div class="min-h-screen bg-gray-50/50 pb-12" x-data="appointmentApp()">
-        
-        <!-- HEADER DEKORATIF (LEBIH SLIM & SUDUT LEBIH KALEM) -->
-        <!-- Perubahan: py-12 jadi py-6, rounded-b-3xl jadi rounded-b-[40px] untuk lengkungan lebih halus -->
+            
         <div class="bg-gradient-to-r from-red-900 to-red-800 py-8 px-4 sm:px-6 lg:px-8 shadow-lg relative overflow-hidden rounded-b-[50px] mx-0 mt-0 z-0">
             <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mt-10 -mr-10 pointer-events-none"></div>
             <div class="max-w-5xl mx-auto relative z-10">
@@ -53,15 +45,12 @@
         </div>
 
         <!-- MAIN CONTENT -->
-        <!-- Perubahan: z-20 diubah jadi z-0 agar tidak menutupi navbar saat scroll -->
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-0">
             
             <!-- STEP INDICATOR MODERN -->
             <div class="bg-white rounded-2xl shadow-xl shadow-red-900/5 p-4 mb-8 border border-gray-100">
                 <div class="flex items-center justify-between relative">
-                    <!-- Line Connector Background -->
                     <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-100 rounded-full -z-0"></div>
-                    <!-- Line Connector Active -->
                     <div class="absolute left-0 top-1/2 transform -translate-y-1/2 h-1 bg-gradient-to-r from-red-600 to-red-800 rounded-full -z-0 transition-all duration-500"
                          :style="'width: ' + ((step - 1) / 3 * 100) + '%'"></div>
 

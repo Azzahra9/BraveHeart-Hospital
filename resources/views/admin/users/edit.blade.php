@@ -3,7 +3,7 @@
         {{ __('Edit User') }}
     </x-slot>
 
-    <!-- HEADER DEKORATIF (Slim) -->
+    <!-- HEADER DEKORATIF -->
     <div class="bg-gradient-to-r from-red-900 to-red-800 py-8 px-4 sm:px-6 lg:px-8 shadow-lg relative overflow-hidden rounded-b-[50px] mx-0 mt-0 z-0">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mt-10 -mr-10 pointer-events-none"></div>
         <div class="max-w-2xl mx-auto relative z-10 text-center">
@@ -116,7 +116,6 @@
                 poliWrapper.classList.remove('hidden');
             } else {
                 poliWrapper.classList.add('hidden');
-                // Reset selection if hidden
                 document.getElementById('poli_id').value = "";
             }
         }

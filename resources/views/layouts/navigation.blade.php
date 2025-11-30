@@ -1,8 +1,4 @@
 <nav x-data="{ open: false }" class="fixed top-0 w-full z-50 pt-6 px-4 sm:px-6 lg:px-8 pointer-events-none">
-    <!-- Wrapper luar menggunakan 'fixed' agar melayang dan 'pointer-events-none' agar area kosong di kiri-kanan bisa ditembus klik -->
-
-    <!-- Primary Navigation Menu (BENTUK KAPSUL/PILL) -->
-    <!-- 'pointer-events-auto' mengaktifkan klik kembali pada area navbar -->
     <div class="max-w-7xl mx-auto bg-white rounded-full shadow-lg border border-gray-100 pointer-events-auto transition-all duration-300">
         <div class="px-4 sm:px-8">
             <div class="flex justify-between h-16">

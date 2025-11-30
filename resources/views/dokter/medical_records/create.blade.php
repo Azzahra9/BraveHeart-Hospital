@@ -26,13 +26,10 @@
 
             <div class="space-y-6">
                 
-                <!-- 1. KARTU PASIEN (Header Info) -->
                 <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-white p-8 relative overflow-hidden">
-                    <!-- Texture Pattern -->
                     <div class="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#7F1D1D_1px,transparent_1px)] [background-size:16px_16px]"></div>
                     
                     <div class="relative z-10 flex flex-col md:flex-row gap-6 items-start">
-                        <!-- Foto Pasien -->
                         <div class="flex-shrink-0">
                             <div class="w-20 h-20 rounded-full p-1 bg-red-50 border border-red-100">
                                 <img src="{{ $appointment->pasien->profile_photo_url }}" 
@@ -41,8 +38,6 @@
                                      onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($appointment->pasien->name) }}&background=E5E7EB&color=374151'">
                             </div>
                         </div>
-
-                        <!-- Detail Pasien -->
                         <div class="flex-1 w-full">
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
                                 <div>
@@ -54,8 +49,6 @@
                                     Sedang Diperiksa
                                 </span>
                             </div>
-
-                            <!-- Keluhan Box -->
                             <div class="bg-red-50/50 rounded-2xl p-5 border border-red-100">
                                 <p class="text-xs font-bold text-red-400 uppercase tracking-wider mb-1">Keluhan Utama</p>
                                 <p class="text-gray-800 font-medium text-lg leading-relaxed">"{{ $appointment->keluhan }}"</p>
@@ -64,7 +57,6 @@
                     </div>
                 </div>
 
-                <!-- 2. FORM DIAGNOSA -->
                 <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-white p-8">
                     <h3 class="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2 border-b border-gray-100 pb-4">
                         <div class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
@@ -164,13 +156,11 @@
         </form>
     </div>
 
-    <!-- JavaScript untuk Tambah Row Obat -->
     <script>
         function addMedicineRow() {
             const container = document.getElementById('medicine-container');
             const row = document.querySelector('.medicine-row').cloneNode(true);
             
-            // Reset nilai input pada row baru
             row.querySelector('select').value = "";
             row.querySelector('input').value = "";
             
@@ -179,11 +169,9 @@
 
         function removeRow(btn) {
             const row = btn.closest('.medicine-row');
-            // Jangan hapus jika itu satu-satunya baris
             if (document.querySelectorAll('.medicine-row').length > 1) {
                 row.remove();
             } else {
-                // Jika satu-satunya, reset saja nilainya
                 row.querySelector('select').value = "";
                 row.querySelector('input').value = "";
             }
