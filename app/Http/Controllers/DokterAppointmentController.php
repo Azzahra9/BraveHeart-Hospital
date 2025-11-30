@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Notifications\AppointmentNotification; // <--- PENTING: Import Class Notifikasi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -48,13 +49,34 @@ class DokterAppointmentController extends Controller
             'status' => 'required|in:Approved,Rejected',
         ]);
 
-        $appointment = Appointment::where('id', $id)
+        // Load relasi 'pasien' agar bisa mengirim notifikasi
+        $appointment = Appointment::with('pasien') 
+            ->where('id', $id)
             ->where('dokter_id', Auth::id())
             ->firstOrFail();
 
+        // Update status di database
         $appointment->update([
             'status' => $request->status
         ]);
+
+        // --- LOGIKA NOTIFIKASI BARU ---
+        if ($request->status == 'Approved') {
+            // Kirim notifikasi jika disetujui
+            $appointment->pasien->notify(new AppointmentNotification([
+                'title'   => 'Janji Temu Disetujui! ✅',
+                'message' => 'Dokter ' . Auth::user()->name . ' menyetujui jadwal Anda pada ' . Carbon::parse($appointment->tanggal_booking)->format('d M Y') . '.',
+                'url'     => route('dashboard'), // Arahkan ke dashboard pasien
+            ]));
+        } elseif ($request->status == 'Rejected') {
+            // Kirim notifikasi jika ditolak
+            $appointment->pasien->notify(new AppointmentNotification([
+                'title'   => 'Janji Temu Ditolak ❌',
+                'message' => 'Mohon maaf, dokter berhalangan pada jadwal tersebut. Silakan ajukan di waktu lain.',
+                'url'     => route('pasien.appointments.create'), // Arahkan ke buat janji baru
+            ]));
+        }
+        // -----------------------------
 
         $message = $request->status == 'Approved' ? 'Janji temu disetujui.' : 'Janji temu ditolak.';
 

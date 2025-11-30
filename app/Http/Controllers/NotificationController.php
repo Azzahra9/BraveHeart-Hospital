@@ -9,15 +9,17 @@ class NotificationController extends Controller
 {
     /**
      * Menandai notifikasi spesifik sebagai 'sudah dibaca'
+     * Dipanggil saat user klik tombol checklist di dashboard
      */
     public function markAsRead($id)
     {
-        // Cari notifikasi milik user yang sedang login
+        // Cari notifikasi milik user yang sedang login berdasarkan ID
         $notification = auth()->user()
             ->notifications()
             ->where('id', $id)
             ->first();
 
+        // Jika ketemu, tandai sudah dibaca (isi kolom read_at di database)
         if ($notification) {
             $notification->markAsRead();
         }

@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\MedicalRecord;
 use App\Models\Medicine;
 use App\Models\Prescription;
+use App\Notifications\AppointmentNotification; // <--- TAMBAHAN: Import Notifikasi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +55,8 @@ class DokterMedicalRecordController extends Controller
 
         // Gunakan Transaksi Database agar data konsisten
         DB::transaction(function () use ($request) {
-            $appointment = Appointment::findOrFail($request->appointment_id);
+            // Load relasi pasien agar bisa notifikasi
+            $appointment = Appointment::with('pasien')->findOrFail($request->appointment_id);
 
             // 1. Simpan Rekam Medis
             $record = MedicalRecord::create([
@@ -68,7 +70,9 @@ class DokterMedicalRecordController extends Controller
             ]);
 
             // 2. Simpan Resep Obat (Jika ada)
+            $adaResep = false; // Flag tambahan untuk cek apakah ada resep
             if ($request->medicines) {
+                $adaResep = true;
                 foreach ($request->medicines as $index => $medicineId) {
                     $qty = $request->quantities[$index] ?? 1;
                     
@@ -89,6 +93,19 @@ class DokterMedicalRecordController extends Controller
 
             // 3. Update Status Appointment jadi 'Selesai'
             $appointment->update(['status' => 'Selesai']);
+
+            // --- LOGIKA NOTIFIKASI BARU (DITAMBAHKAN DISINI) ---
+            // Kode ini hanya tambahan, tidak mengganggu logika di atas
+            $pesan = $adaResep 
+                ? 'Pemeriksaan selesai. Silakan tebus resep obat Anda di instalasi farmasi 💊.' 
+                : 'Pemeriksaan selesai. Terima kasih telah mempercayakan kesehatan Anda kepada kami.';
+
+            $appointment->pasien->notify(new AppointmentNotification([
+                'title'   => 'Hasil Pemeriksaan Keluar 📋',
+                'message' => $pesan,
+                'url'     => route('pasien.medical-records.show', $record->id), // Link ke detail resep
+            ]));
+            // ---------------------------------------------------
         });
 
         return redirect()->route('dokter.appointments.index')
@@ -97,7 +114,6 @@ class DokterMedicalRecordController extends Controller
 
     /**
      * Menampilkan Detail Rekam Medis
-     * Method ini yang sebelumnya hilang dan menyebabkan error.
      */
     public function show($id)
     {
